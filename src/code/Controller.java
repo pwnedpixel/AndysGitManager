@@ -1,5 +1,6 @@
 package code;
 
+import javafx.application.Platform;
 import javafx.beans.Observable;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -7,25 +8,36 @@ import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.awt.Color.BLACK;
+import static java.awt.SystemColor.text;
+
 public class Controller {
 
     @FXML
-    Button openRepoButton, addButton, removeButton, commitButton, amendButton;
+    Button commitButton, amendButton;
     @FXML
     AnchorPane topPane;
     @FXML
     TableView<GitFile> filesListView;
     @FXML
     TextArea commitMessageText;
+    @FXML
+    TextFlow diffTextArea;
 
 
+    ArrayList<Text> itemsToAdd = new ArrayList();
     JFileChooser chooser;
     String gitDirectory;
     //Setup the table
@@ -64,60 +76,96 @@ public class Controller {
             gitDirectory = "";
         }
         filesListView.setItems(data);
-        filesListView.getColumns().addAll(selCol,statusCol, pathCol);
+        if (filesListView.getColumns().size()==0) {
+            filesListView.getColumns().addAll(selCol, statusCol, pathCol);
+        }
         populateTable();
 
     }
 
     public void addButtonPress(){
-        System.out.println("Removing Selected File");
+        System.out.println("Adding Selected File");
         GitFile selected = filesListView.getSelectionModel().getSelectedItem();
-        new CommandThread().start("git -C "+gitDirectory+" add "+selected.getPath(),args -> {
+        new CommandThread("git -C "+gitDirectory+" add "+selected.getPath(),args -> {
             populateTable();
-        });
+        }).start();
     }
 
     public void removeButtonPress(){
         System.out.println("Removing Selected File");
         GitFile selected = filesListView.getSelectionModel().getSelectedItem();
-        new CommandThread().start("git -C "+gitDirectory+" reset "+selected.getPath(),args -> {
+        new CommandThread("git -C "+gitDirectory+" reset "+selected.getPath(),args -> {
             populateTable();
-        });
+        }).start();
     }
 
     public void commitButtonPress(){
         System.out.println("Committing Changes");
-        new CommandThread().start("git -C "+gitDirectory+" commit -m \""+commitMessageText.getText()+"\"",args -> {
+        new CommandThread("git -C "+gitDirectory+" commit -m \""+commitMessageText.getText()+"\"",args -> {
             commitMessageText.setText("");
             populateTable();
-        });
+        }).start();
     }
 
     public void amendButtonPress(){
         System.out.println("Committing Changes");
-        new CommandThread().start("git -C "+gitDirectory+" commit --amend -m \""+commitMessageText.getText()+"\"",args -> {
+        new CommandThread("git -C "+gitDirectory+" commit --amend -m \""+commitMessageText.getText()+"\"",args -> {
             commitMessageText.setText("");
             populateTable();
-        });
+        }).start();
     }
 
-    public void commitButtonMouseOver(){
-        commitButton.setOpacity(1);
-    }
-    public void commitButtonMouseOff(){
-        commitButton.setOpacity(0.25);
-    }
+    public void viewDiff(){
+        System.out.println("Viewing Differences");
+        itemsToAdd.clear();
+        diffTextArea.getChildren().clear();
 
-    public void amendButtonMouseOver(){
-        amendButton.setOpacity(1);
-    }
-    public void amendButtonMouseOff(){
-        amendButton.setOpacity(0.25);
+        GitFile selected = filesListView.getSelectionModel().getSelectedItem();
+        new CommandThread("git -C "+gitDirectory+" diff "+selected.getPath(), args -> {
+           // System.out.println("HELLO "+args[0]);
+            String s = args[0];
+            StringBuilder sb = new StringBuilder();
+            Color currentColour = Color.BLACK;
+            boolean newLine = false;
+            boolean useBackground = false;
+            for (int i=0; i<s.length(); i++) {
+                switch (s.charAt(i)) {
+                    case '+':
+                        if (newLine)
+                            currentColour = Color.GREEN;
+                        useBackground = true;
+                        break;
+                    case '-':
+                        if (newLine)
+                            currentColour = Color.RED;
+                        useBackground = true;
+                        break;
+                    case '\n':
+                        currentColour = Color.BLACK;
+                        useBackground = false;
+                        newLine = true;
+                        break;
+                    case ' ':
+                        newLine=false;
+                        break;
+                    // ... rest of escape characters
+                    default:
+                        break;
+
+                }
+                Text text = new Text(s.charAt(i)+"");
+                text.setFill(currentColour);
+                itemsToAdd.add(text);
+            }
+            Platform.runLater(() -> diffTextArea.getChildren().addAll(itemsToAdd));
+
+            System.out.println(unEscapeString(args[0]));
+        }).start();
     }
 
     public void populateTable(){
 
-        new CommandThread().start("git -C "+gitDirectory + " status", args -> {
+        new CommandThread("git -C "+gitDirectory + " status", args -> {
             String[] statusReturn = args[0].split("\\s+");
             boolean nextIsFile = false;
             String currentStatus = "";
@@ -149,7 +197,40 @@ public class Controller {
                     currentStatus = "modified";
                 }
             }
-        });
+        }).start();
+    }
+
+    public void refreshButtonPress(){
+        System.out.println("Refreshing View");
+        populateTable();
+        diffTextArea.getChildren().addAll(itemsToAdd);
+        itemsToAdd.clear();
+    }
+
+    public void commitButtonMouseOver(){
+        commitButton.setOpacity(1);
+    }
+    public void commitButtonMouseOff(){
+        commitButton.setOpacity(0.25);
+    }
+
+    public void amendButtonMouseOver(){
+        amendButton.setOpacity(1);
+    }
+    public void amendButtonMouseOff(){
+        amendButton.setOpacity(0.25);
+    }
+
+    public static String unEscapeString(String s){
+        StringBuilder sb = new StringBuilder();
+        for (int i=0; i<s.length(); i++)
+            switch (s.charAt(i)){
+                case '\n': sb.append("\\n"); break;
+                case '\t': sb.append("\\t"); break;
+                // ... rest of escape characters
+                default: sb.append(s.charAt(i));
+            }
+        return sb.toString();
     }
 
 
