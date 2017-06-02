@@ -17,7 +17,7 @@ import java.util.List;
 public class Controller {
 
     @FXML
-    Button openRepoButton, addButton, removeButton, commitButton, amendButton;
+    Button openRepoButton, addButton, removeButton, commitButton, amendButton, refreshButton;
     @FXML
     AnchorPane topPane;
     @FXML
@@ -64,7 +64,9 @@ public class Controller {
             gitDirectory = "";
         }
         filesListView.setItems(data);
-        filesListView.getColumns().addAll(selCol,statusCol, pathCol);
+        if (filesListView.getColumns().size()==0) {
+            filesListView.getColumns().addAll(selCol, statusCol, pathCol);
+        }
         populateTable();
 
     }
@@ -99,20 +101,6 @@ public class Controller {
             commitMessageText.setText("");
             populateTable();
         });
-    }
-
-    public void commitButtonMouseOver(){
-        commitButton.setOpacity(1);
-    }
-    public void commitButtonMouseOff(){
-        commitButton.setOpacity(0.25);
-    }
-
-    public void amendButtonMouseOver(){
-        amendButton.setOpacity(1);
-    }
-    public void amendButtonMouseOff(){
-        amendButton.setOpacity(0.25);
     }
 
     public void populateTable(){
@@ -150,6 +138,25 @@ public class Controller {
                 }
             }
         });
+    }
+
+    public void refreshButtonPress(){
+        System.out.println("Refreshing View");
+        populateTable();
+    }
+
+    public void commitButtonMouseOver(){
+        commitButton.setOpacity(1);
+    }
+    public void commitButtonMouseOff(){
+        commitButton.setOpacity(0.25);
+    }
+
+    public void amendButtonMouseOver(){
+        amendButton.setOpacity(1);
+    }
+    public void amendButtonMouseOff(){
+        amendButton.setOpacity(0.25);
     }
 
 
