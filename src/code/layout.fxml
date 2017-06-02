@@ -35,6 +35,8 @@
                   <TextArea fx:id="commitMessageText" layoutX="228.0" layoutY="5.0" prefHeight="108.0" prefWidth="341.0" promptText="Commit Message" />
                   <Button fx:id="commitButton" layoutX="491.0" layoutY="82.0" mnemonicParsing="false" onAction="#commitButtonPress" onMouseEntered="#commitButtonMouseOver" onMouseExited="#commitButtonMouseOff" opacity="0.25" text="Commit" />
                   <Button fx:id="amendButton" layoutX="427.0" layoutY="82.0" mnemonicParsing="false" onAction="#amendButtonPress" onMouseEntered="#amendButtonMouseOver" onMouseExited="#amendButtonMouseOff" opacity="0.25" text="Amend" />
+                  <Button fx:id="refreshButton" layoutX="156.0" layoutY="117.0" mnemonicParsing="false" onAction="#refreshButtonPress" prefHeight="25.0" prefWidth="59.0" text="Refresh" />
+                  <Label layoutX="14.0" layoutY="121.0" prefHeight="17.0" prefWidth="133.0" text="Refresh the View" />
                </children>
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="243.0" prefWidth="935.0">
