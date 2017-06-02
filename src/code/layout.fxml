@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -31,6 +32,9 @@
                   <Button fx:id="removeButton" layoutX="156.0" layoutY="82.0" mnemonicParsing="false" onAction="#removeButtonPress" text="Remove" />
                   <Label layoutX="14.0" layoutY="50.0" text="Stage Selected File" />
                   <Label layoutX="14.0" layoutY="86.0" text="Unstage Selected File" />
+                  <TextArea fx:id="commitMessageText" layoutX="228.0" layoutY="5.0" prefHeight="108.0" prefWidth="341.0" promptText="Commit Message" />
+                  <Button fx:id="commitButton" layoutX="491.0" layoutY="82.0" mnemonicParsing="false" onAction="#commitButtonPress" onMouseEntered="#commitButtonMouseOver" onMouseExited="#commitButtonMouseOff" opacity="0.25" text="Commit" />
+                  <Button fx:id="amendButton" layoutX="427.0" layoutY="82.0" mnemonicParsing="false" onAction="#amendButtonPress" onMouseEntered="#amendButtonMouseOver" onMouseExited="#amendButtonMouseOff" opacity="0.25" text="Amend" />
                </children>
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="243.0" prefWidth="935.0">

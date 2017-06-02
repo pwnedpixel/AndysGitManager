@@ -6,10 +6,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.control.cell.PropertyValueFactory;
 
@@ -20,19 +17,34 @@ import java.util.List;
 public class Controller {
 
     @FXML
-    Button openRepoButton, addButton, removeButton;
+    Button openRepoButton, addButton, removeButton, commitButton, amendButton;
     @FXML
     AnchorPane topPane;
     @FXML
     TableView<GitFile> filesListView;
+    @FXML
+    TextArea commitMessageText;
 
 
     JFileChooser chooser;
     String gitDirectory;
-    CommandThread commander;
+    //Setup the table
+
+    final ObservableList<GitFile> data =
+            FXCollections.observableArrayList();
+
+    TableColumn selCol = new TableColumn("Staged");
+    TableColumn statusCol = new TableColumn("Status");
+    TableColumn pathCol = new TableColumn("Path");
+
 
 
     public Controller(){
+        selCol.setCellValueFactory(new PropertyValueFactory<GitFile, String>("staged"));
+        statusCol.setMinWidth(65);
+        statusCol.setCellValueFactory(new PropertyValueFactory<GitFile, String>("status"));
+        pathCol.setMinWidth(400);
+        pathCol.setCellValueFactory(new PropertyValueFactory<GitFile, String>("path"));
 
     }
 
@@ -51,7 +63,8 @@ public class Controller {
             System.out.println("no directory selected");
             gitDirectory = "";
         }
-        filesListView.getColumns().clear();
+        filesListView.setItems(data);
+        filesListView.getColumns().addAll(selCol,statusCol, pathCol);
         populateTable();
 
     }
@@ -59,7 +72,6 @@ public class Controller {
     public void addButtonPress(){
         System.out.println("Removing Selected File");
         GitFile selected = filesListView.getSelectionModel().getSelectedItem();
-        filesListView.getColumns().clear();
         new CommandThread().start("git -C "+gitDirectory+" add "+selected.getPath(),args -> {
             populateTable();
         });
@@ -68,35 +80,49 @@ public class Controller {
     public void removeButtonPress(){
         System.out.println("Removing Selected File");
         GitFile selected = filesListView.getSelectionModel().getSelectedItem();
-        filesListView.getColumns().clear();
         new CommandThread().start("git -C "+gitDirectory+" reset "+selected.getPath(),args -> {
             populateTable();
         });
     }
 
+    public void commitButtonPress(){
+        System.out.println("Committing Changes");
+        new CommandThread().start("git -C "+gitDirectory+" commit -m \""+commitMessageText.getText()+"\"",args -> {
+            commitMessageText.setText("");
+            populateTable();
+        });
+    }
+
+    public void amendButtonPress(){
+        System.out.println("Committing Changes");
+        new CommandThread().start("git -C "+gitDirectory+" commit --amend -m \""+commitMessageText.getText()+"\"",args -> {
+            commitMessageText.setText("");
+            populateTable();
+        });
+    }
+
+    public void commitButtonMouseOver(){
+        commitButton.setOpacity(1);
+    }
+    public void commitButtonMouseOff(){
+        commitButton.setOpacity(0.25);
+    }
+
+    public void amendButtonMouseOver(){
+        amendButton.setOpacity(1);
+    }
+    public void amendButtonMouseOff(){
+        amendButton.setOpacity(0.25);
+    }
+
     public void populateTable(){
 
         new CommandThread().start("git -C "+gitDirectory + " status", args -> {
-            //System.out.println("Handler:" +args[0]);
             String[] statusReturn = args[0].split("\\s+");
             boolean nextIsFile = false;
             String currentStatus = "";
             int isStaged = 0;
-
-            //Setup the table
-            final ObservableList<GitFile> data =
-                    FXCollections.observableArrayList();
-
-            TableColumn selCol = new TableColumn("Staged");
-            selCol.setCellValueFactory(new PropertyValueFactory<GitFile, String>("staged"));
-            TableColumn statusCol = new TableColumn("Status");
-            statusCol.setMinWidth(65);
-            statusCol.setCellValueFactory(new PropertyValueFactory<GitFile, String>("status"));
-            TableColumn pathCol = new TableColumn("Path");
-            pathCol.setMinWidth(400);
-            pathCol.setCellValueFactory(new PropertyValueFactory<GitFile, String>("path"));
-
-
+            data.clear();
 
             for (String segment : statusReturn){
                 if (nextIsFile && isStaged ==0){
@@ -123,12 +149,6 @@ public class Controller {
                     currentStatus = "modified";
                 }
             }
-
-            filesListView.setItems(data);
-
-            // filesListView.getColumns().removeAll(selCol,statusCol,pathCol);
-            filesListView.getColumns().addAll(selCol,statusCol, pathCol);
-
         });
     }
 
