@@ -34,11 +34,11 @@
       <RowConstraints />
    </rowConstraints>
    <children>
-      <SplitPane dividerPositions="0.7456140350877193" orientation="VERTICAL" prefHeight="800.0" prefWidth="1000.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+      <SplitPane dividerPositions="0.7456140350877193" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" orientation="VERTICAL" prefHeight="800.0" prefWidth="1000.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
         <items>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="391.0" prefWidth="935.0">
+          <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0">
                <children>
-                  <MenuBar prefHeight="9.0" prefWidth="998.0">
+                  <MenuBar maxWidth="1.7976931348623157E308" prefHeight="9.0" prefWidth="998.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                     <menus>
                       <Menu mnemonicParsing="false" text="Repository">
                         <items>
@@ -62,7 +62,7 @@
                       </Menu>
                     </menus>
                   </MenuBar>
-                  <ScrollPane layoutY="25.0" prefHeight="567.0" prefWidth="998.0">
+                  <ScrollPane layoutY="25.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="567.0" prefWidth="998.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
                      <content>
                         <TextFlow fx:id="diffTextArea" prefHeight="563.0" prefWidth="984.0" />
                      </content>
@@ -70,13 +70,13 @@
                </children></AnchorPane>
           <AnchorPane fx:id="topPane" minHeight="0.0" minWidth="0.0" prefHeight="338.0" prefWidth="935.0">
                <children>
-                  <TextArea fx:id="commitMessageText" layoutX="580.0" layoutY="86.0" prefHeight="108.0" prefWidth="341.0" promptText="Commit Message" />
-                  <Button fx:id="commitButton" layoutX="851.0" layoutY="165.0" mnemonicParsing="false" onAction="#commitButtonPress" onMouseEntered="#commitButtonMouseOver" onMouseExited="#commitButtonMouseOff" opacity="0.25" text="Commit" />
-                  <Button fx:id="amendButton" layoutX="787.0" layoutY="165.0" mnemonicParsing="false" onAction="#amendButtonPress" onMouseEntered="#amendButtonMouseOver" onMouseExited="#amendButtonMouseOff" opacity="0.25" text="Amend" />
-                  <TableView fx:id="filesListView" layoutY="-5.0" prefHeight="202.0" prefWidth="566.0" />
+                  <TextArea fx:id="commitMessageText" layoutX="580.0" layoutY="46.0" prefHeight="151.0" prefWidth="341.0" promptText="Commit Message" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="580.0" AnchorPane.rightAnchor="77.0" AnchorPane.topAnchor="46.0" />
+                  <Button fx:id="commitButton" layoutX="851.0" layoutY="165.0" mnemonicParsing="false" onAction="#commitButtonPress" onMouseEntered="#commitButtonMouseOver" onMouseExited="#commitButtonMouseOff" opacity="0.25" text="Commit" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="88.0" />
+                  <Button fx:id="amendButton" layoutX="787.0" layoutY="165.0" mnemonicParsing="false" onAction="#amendButtonPress" onMouseEntered="#amendButtonMouseOver" onMouseExited="#amendButtonMouseOff" opacity="0.25" text="Amend" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="156.0" />
+                  <TableView fx:id="filesListView" layoutY="-5.0" prefHeight="202.0" prefWidth="566.0" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="-5.0" />
                   <Button layoutX="580.0" layoutY="14.0" mnemonicParsing="false" onAction="#addButtonPress" prefHeight="25.0" prefWidth="60.0" text="Stage" />
-                  <Button layoutX="580.0" layoutY="48.0" mnemonicParsing="false" onAction="#removeButtonPress" text="Unstage" />
-                  <Button layoutX="649.0" layoutY="14.0" mnemonicParsing="false" onAction="#viewDiff" prefHeight="25.0" prefWidth="60.0" text="Diff" />
+                  <Button layoutX="650.0" layoutY="14.0" mnemonicParsing="false" onAction="#removeButtonPress" text="Unstage" />
+                  <Button layoutX="721.0" layoutY="14.0" mnemonicParsing="false" onAction="#viewDiff" prefHeight="25.0" prefWidth="60.0" text="Diff" />
                </children>
             </AnchorPane>
         </items>

@@ -45,7 +45,6 @@ public class Controller {
     @FXML
     MenuItem pushButton;
 
-
     ArrayList<Text> itemsToAdd = new ArrayList();
     JFileChooser chooser;
     String gitDirectory;
@@ -57,7 +56,6 @@ public class Controller {
     TableColumn selCol = new TableColumn("Staged");
     TableColumn statusCol = new TableColumn("Status");
     TableColumn pathCol = new TableColumn("Path");
-
 
 
     public Controller(){
