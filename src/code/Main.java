@@ -13,6 +13,7 @@ public class Main extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("layout.fxml"));
         primaryStage.setTitle("Andy's Git Manager");
         primaryStage.setScene(new Scene(root, 1000 , 800));
+        setUserAgentStylesheet(STYLESHEET_CASPIAN);
         primaryStage.show();
     }
 

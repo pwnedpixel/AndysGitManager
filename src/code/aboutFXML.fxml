@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="350.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="code.aboutController">
+   <children>
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="89.0" layoutY="62.0" text="A simple Git manager" textAlignment="CENTER" AnchorPane.leftAnchor="89.0" AnchorPane.rightAnchor="89.0">
+         <font>
+            <Font size="18.0" />
+         </font></Label>
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="96.0" layoutY="107.0" text="Author: Andy Keech" textAlignment="CENTER" AnchorPane.leftAnchor="89.0" AnchorPane.rightAnchor="89.0">
+         <font>
+            <Font size="18.0" />
+         </font></Label>
+      <Button fx:id="closeButton" layoutX="142.0" layoutY="151.0" mnemonicParsing="false" onAction="#closeButton" prefHeight="27.0" prefWidth="66.0" text="Close" AnchorPane.leftAnchor="142.0" AnchorPane.rightAnchor="142.0" />
+   </children>
+   <effect>
+      <DropShadow />
+   </effect>
+</AnchorPane>

@@ -12,6 +12,11 @@ public class CommandThread extends Thread {
     String _command;
     SuccessHandler _handler;
 
+    /**
+     * Constructor for the CommandThread Object
+     * @param command the command to execute
+     * @param handler callback function for after the command has executed
+     */
     public CommandThread(String command, SuccessHandler handler){
         _handler = handler;
         _command = command;
