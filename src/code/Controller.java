@@ -114,13 +114,25 @@ public class Controller {
         }).start();
     }
 
+    public void exitButton(){
+        Stage stage = (Stage) commitButton.getScene().getWindow();
+        stage.close();
+    }
+
+    public void aboutButton() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("aboutFXML.fxml"));
+        Stage stage = new Stage();
+        stage.setScene(new Scene(loader.load()));
+        stage.setResizable(false);
+        stage.showAndWait();
+    }
+
     public void pushButtonPress(Event e) throws Exception {
         System.out.println("Pushing Changes");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("confirmPopup.fxml"));
         Stage stage = new Stage();
         stage.setScene(new Scene(loader.load()));
         ConfirmPopup controller = loader.<ConfirmPopup>getController();
-
         stage.showAndWait();
         if (controller.response.equals("yes")){
             new CommandThread("git -C "+gitDirectory+" push", args -> populateTable()).start();
