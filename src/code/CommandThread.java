@@ -32,12 +32,9 @@ public class CommandThread extends Thread {
                     new BufferedReader(new InputStreamReader(p.getInputStream()));
 
             String line = "";
-
             while ((line = reader.readLine())!= null) {
-
                 output.append(line + "\n");
             }
-            System.out.println(output);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -7,16 +7,23 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import javax.swing.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +42,8 @@ public class Controller {
     TextArea commitMessageText;
     @FXML
     TextFlow diffTextArea;
+    @FXML
+    MenuItem pushButton;
 
 
     ArrayList<Text> itemsToAdd = new ArrayList();
@@ -107,6 +116,21 @@ public class Controller {
         }).start();
     }
 
+    public void pushButtonPress(Event e) throws Exception {
+        System.out.println("Pushing Changes");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("confirmPopup.fxml"));
+        Stage stage = new Stage();
+        stage.setScene(new Scene(loader.load()));
+        ConfirmPopup controller = loader.<ConfirmPopup>getController();
+
+        stage.showAndWait();
+        if (controller.response.equals("yes")){
+            new CommandThread("git -C "+gitDirectory+" push", args -> populateTable()).start();
+        }
+        System.out.println("WE BACK");
+
+    }
+
     public void amendButtonPress(){
         System.out.println("Committing Changes");
         new CommandThread("git -C "+gitDirectory+" commit --amend -m \""+commitMessageText.getText()+"\"",args -> {
@@ -159,7 +183,6 @@ public class Controller {
             }
             Platform.runLater(() -> diffTextArea.getChildren().addAll(itemsToAdd));
 
-            System.out.println(unEscapeString(args[0]));
         }).start();
     }
 

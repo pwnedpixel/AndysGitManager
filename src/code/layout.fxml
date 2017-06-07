@@ -52,6 +52,7 @@
                               <MenuItem mnemonicParsing="false" onAction="#removeButtonPress" text="Unstage Selected" />
                               <MenuItem mnemonicParsing="false" onAction="#viewDiff" text="View Diff" />
                               <MenuItem mnemonicParsing="false" onAction="#refreshButtonPress" text="Refresh" />
+                              <MenuItem fx:id="pushButton" mnemonicParsing="false" onAction="#pushButtonPress" text="Push" />
                           </items>
                         </Menu>
                       <Menu mnemonicParsing="false" text="Help">
