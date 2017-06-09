@@ -34,6 +34,8 @@ public class Controller {
     TextFlow diffTextArea;
     @FXML
     MenuItem pushButton;
+    @FXML
+    Label currentBranchLabel;
 
     //Text items to add to the TextFlow window
     ArrayList<Text> itemsToAdd = new ArrayList();
@@ -85,6 +87,7 @@ public class Controller {
             filesListView.getColumns().addAll(selCol, statusCol, pathCol);
         }
         populateTable();
+        updateCurrentBranch();
 
     }
 
@@ -168,6 +171,13 @@ public class Controller {
         new CommandThread("git -C "+gitDirectory+" commit --amend -m \""+commitMessageText.getText()+"\"",args -> {
             commitMessageText.setText("");
             populateTable();
+        }).start();
+    }
+
+    public void updateCurrentBranch(){
+        System.out.println("Updating current branch Label");
+        new CommandThread("git -C "+gitDirectory+" rev-parse --abbrev-ref HEAD",args -> {
+            Platform.runLater(() -> currentBranchLabel.setText("Current Branch: "+args[0]));
         }).start();
     }
 
